@@ -1,0 +1,57 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Get AWS Credentials
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::930612219184:role/github_action_role
+        aws-region: eu-west-2
+
+    # Install the latest version of Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_wrapper: true
+    
+    # Install latest version of Terragrunt
+    - name: Setup Terragrunt
+      uses: autero1/action-terragrunt@v1.1.1
+      with:
+        terragrunt_version: latest
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    #- name: Terraform Format
+    #  run: terragrunt fmt -check
+
+    # Generates an execution plan for Terraform
+    #- name: Terraform Plan
+    #  run: terragrunt plan -auto-approve -input=false
+
+    # On push to main, build or change infrastructure according to Terraform configuration files
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terragrunt apply -auto-approve -input=false
