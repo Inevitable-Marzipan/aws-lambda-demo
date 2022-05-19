@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "Spacelift_Test_Lambda_Function_Role"
+  name               = "Lambda_Function_Role"
   assume_role_policy = <<EOF
 {
  "Version": "2012-10-17",
@@ -47,12 +47,12 @@ resource "aws_iam_role_policy_attachment" "policy_attach" {
 
 data "archive_file" "python_file" {
   type        = "zip"
-  source_dir  = "${path.module}/python/"
-  output_path = "${path.module}/python/hello-python.zip"
+  source_dir  = "${path.module}/../python/"
+  output_path = "${path.module}/../python/hello-python.zip"
 }
 
 resource "aws_lambda_function" "lambda_func" {
-  filename      = "${path.module}/python/hello-python.zip"
+  filename      = "${path.module}/../python/hello-python.zip"
   function_name = "Test_Lambda_Function"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.lambda_handler"
