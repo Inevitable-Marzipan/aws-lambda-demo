@@ -44,12 +44,12 @@ jobs:
         terragrunt_version: latest
 
     # Checks that all Terraform configuration files adhere to a canonical format
-    #- name: Terraform Format
-    #  run: terragrunt fmt -check
+    - name: Terraform Format
+      run: terragrunt fmt -check
 
     # Generates an execution plan for Terraform
-    #- name: Terraform Plan
-    #  run: terragrunt plan -auto-approve -input=false
+    - name: Terraform Plan
+      run: terragrunt plan
 
     # On push to main, build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
