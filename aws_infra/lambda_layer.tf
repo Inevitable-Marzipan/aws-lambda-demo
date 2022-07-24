@@ -33,7 +33,7 @@ resource "null_resource" "install_dependencies2" {
 
 data "archive_file" "lambda_layer_zip" {
   type        = "zip"
-  source_dir  = "${local.lambda_src_path}/dependencies/"
+  source_dir  = "${local.lambda_src_path}/dependencies2/"
   output_path = "${path.module}/.tmp/${random_uuid.lambda_src_hash.result}.zip"
 
   # This is necessary, since archive_file is now a
