@@ -19,19 +19,19 @@ resource "null_resource" "install_dependencies" {
   }
 }
 
-#data "archive_file" "lambda_layer_zip" {
-#  type        = "zip"
-#  source_dir  = "${local.lambda_src_path}/dependencies/"
-#  output_path = "${path.module}/.tmp/${random_uuid.lambda_src_hash.result}.zip"
+data "archive_file" "lambda_layer_zip" {
+  type        = "zip"
+  source_dir  = "${local.lambda_src_path}/dependencies/"
+  output_path = "${path.module}/.tmp/${random_uuid.lambda_src_hash.result}.zip"
 
   # This is necessary, since archive_file is now a
   # `data` source and not a `resource` anymore.
   # Use `depends_on` to wait for the "install dependencies"
   # task to be completed.
-#  depends_on = [null_resource.install_dependencies]
-#}
+  depends_on = [null_resource.install_dependencies]
+}
 
-#resource "aws_lambda_layer_version" "lambda_layer" {
-#  filename   = data.archive_file.lambda_layer_zip.output_path
-#  layer_name = "lambda_layer"
-#}
+resource "aws_lambda_layer_version" "lambda_layer" {
+  filename   = data.archive_file.lambda_layer_zip.output_path
+  layer_name = "lambda_layer"
+}
