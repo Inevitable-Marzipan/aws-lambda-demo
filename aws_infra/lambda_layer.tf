@@ -40,7 +40,7 @@ data "archive_file" "lambda_layer_zip" {
   # `data` source and not a `resource` anymore.
   # Use `depends_on` to wait for the "install dependencies"
   # task to be completed.
-  depends_on = [null_resource.install_dependencies]
+  depends_on = [null_resource.install_dependencies2]
 }
 
 resource "aws_lambda_layer_version" "lambda_layer" {
