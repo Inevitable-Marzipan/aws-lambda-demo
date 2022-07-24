@@ -14,7 +14,7 @@ resource "null_resource" "install_dependencies" {
   # Only re-run this if the dependencies or their versions
   # have changed since the last deployment with Terraform
   triggers = {
-    dependencies_versions = filemd5("${local.lambda_src_path}/requirements.txt")
+    # dependencies_versions = filemd5("${local.lambda_src_path}/requirements.txt")
     # source_code_hash = random_uuid.lambda_src_hash.result # This is a suitable option too
   }
 }
