@@ -28,8 +28,8 @@ resource "null_resource" "install_dependencies2" {
 
   tiggers = {
     always_run = "${timestamp()}"
-    }
   }
+}
 
 data "archive_file" "lambda_layer_zip" {
   type        = "zip"
