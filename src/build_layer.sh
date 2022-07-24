@@ -1,5 +1,5 @@
 #!/bin/bash
-export PKG_DIR="dependencies2"
+export PKG_DIR="dependencies2/python/lib/python3.8/site-packages/"
 cd src
 rm -rf ${PKG_DIR} && mkdir -p ${PKG_DIR}
 
