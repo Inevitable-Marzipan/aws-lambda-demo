@@ -26,7 +26,7 @@ resource "null_resource" "install_dependencies2" {
     command = "sh ${local.lambda_src_path}/build_layer.sh"
   }
 
-  tiggers = {
+  triggers = {
     always_run = "${timestamp()}"
   }
 }
