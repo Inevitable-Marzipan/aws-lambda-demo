@@ -20,6 +20,17 @@ resource "null_resource" "install_dependencies" {
   }
 }
 
+  # Installs packages using pip
+resource "null_resource" "install_dependencies2" {
+  provisioner "local-exec" {
+    command = "sh ${local.lambda_src_path}/build_layer.sh"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 data "archive_file" "lambda_layer_zip" {
   type        = "zip"
   source_dir  = "${local.lambda_src_path}/dependencies/"
