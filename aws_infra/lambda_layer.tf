@@ -35,4 +35,5 @@ data "archive_file" "lambda_layer_zip" {
 resource "aws_lambda_layer_version" "lambda_layer" {
   filename   = data.archive_file.lambda_layer_zip.output_path
   layer_name = "lambda_layer"
+  runtime    = "python3.8"
 }
