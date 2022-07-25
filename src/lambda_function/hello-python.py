@@ -1,4 +1,4 @@
-import pandas as pd
+import requests
 
 def lambda_handler(event, context):
 
