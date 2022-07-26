@@ -1,3 +1,7 @@
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "lambda_role" {
   name               = "Lambda_Function_Role"
   assume_role_policy = <<EOF
@@ -33,7 +37,12 @@ resource "aws_iam_policy" "lambda_logging" {
      ],
      "Resource": "arn:aws:logs:*:*:*",
      "Effect": "Allow"
-   }
+   },
+  {
+    "Action": ["ssm:GetParameter*"],
+    "Resource": ["arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/development/opensky-network/*"]
+    "Effect": "Allow",
+  }
  ]
 }
 EOF
