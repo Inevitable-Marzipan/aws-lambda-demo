@@ -2,7 +2,7 @@ import requests
 import boto3
 
 ssm = boto3.client('ssm')
-parameter = ssm.get_parameter(Name='username', WithDecryption=True)['Parameter']['Value']
+parameter = ssm.get_parameter(Name='/development/opensky-network/username', WithDecryption=True)['Parameter']['Value']
 
 def lambda_handler(event, context):
 
