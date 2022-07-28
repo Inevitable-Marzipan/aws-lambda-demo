@@ -6,7 +6,7 @@ parameter = ssm.get_parameter(Name='/development/opensky-network/username', With
 
 def lambda_handler(event, context):
 
-   message = 'Hello {} !, username: {}'.format(event['key1'], parameter)
+   message = 'Hello there {} !, username: {}'.format(event['key1'], parameter)
    return {
        'message' : message
    }
