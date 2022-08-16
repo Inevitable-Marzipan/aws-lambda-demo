@@ -13,6 +13,7 @@ import datetime
 import json
 from unittest.mock import patch
 from unittest import mock
+from unittest.mock import Mock
 
 from moto import mock_s3
 import boto3
@@ -50,18 +51,19 @@ def test_get_data():
 
 @mock_s3
 @mock.patch.dict(os.environ, {"bucket": "test_bucket", "AWS_REGION": "eu-west-2"})
+@patch('lambda_function.lambda_function._get_datetime_key', '2015/10/08/16/53/')
 def test_lambda_handler():
     bucket_name = os.environ['bucket']
     region = os.environ['AWS_REGION']
     conn = boto3.resource('s3', region)
     conn.create_bucket(Bucket=bucket_name, CreateBucketConfiguration={'LocationConstraint': region})
 
-    event = {"time": "2015-10-08T16:53:06Z"}
+    event = {"time": "2015-10-08T16:53:06Z", 'airplane_icao24': '1234'}
     context = None
 
     unix_start = get_unix_start_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ'))
     unix_end = get_unix_end_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ'))
-    params = {'begin': unix_start, 'end': unix_end}
+    params = {'begin': unix_start, 'end': unix_end, 'airplane_icao24': event['airplane_icao24']}
     json_data = {"data_key": "data_value"}
     status_code = 200
 
@@ -72,7 +74,7 @@ def test_lambda_handler():
         mock_get_data.assert_called_once()
         mock_get_data.assert_called_with(url, auth=auth, params=params)
 
-    body = conn.Object(bucket_name, 'test.json').get()[
+    body = conn.Object(bucket_name, f'2015/10/08/16/53/{event["airplane_icao24"]}.json').get()[
     'Body'].read().decode("utf-8")
 
     assert json.loads(body) == json_data

@@ -22,10 +22,25 @@ def get_data(url, auth=None, params=None):
 
     return data
 
+def _get_datetime_key():
+    dt_now = datetime.datetime.now(tz=datetime.timezone.utc)
+    key = (
+        dt_now.strftime("%Y-%m-%d")
+        + "/"
+        + dt_now.strftime("%H")
+        + "/"
+        + dt_now.strftime("%M")
+        + "/"
+    )
+    return key
+
 def lambda_handler(event, context):
-    unix_start = get_unix_start_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ'))
-    unix_end = get_unix_end_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ'))
-    params = {'begin': unix_start, 'end': unix_end}
+    invoke_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
+    unix_start = get_unix_start_time(invoke_datetime)
+    unix_end = get_unix_end_time(invoke_datetime)
+    airplane_icao24 = event['airplane_icao24']
+    params = {'begin': unix_start, 'end': unix_end, 'airplane_icao24': airplane_icao24}
     data = get_data(url, auth=auth, params=params)
     client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
-    client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key='test.json')
+    key = f"{_get_datetime_key}{airplane_icao24}.json" 
+    client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
