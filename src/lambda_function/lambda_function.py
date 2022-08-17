@@ -43,7 +43,7 @@ def lambda_handler(event, context):
     unix_start = get_unix_start_time(invoke_datetime)
     unix_end = get_unix_end_time(invoke_datetime)
     airplane_icao24 = event['airplane_icao24']
-    params = {'begin': unix_start, 'end': unix_end, 'airplane_icao24': airplane_icao24}
+    params = {'begin': unix_start, 'end': unix_end, 'icao24': airplane_icao24}
 
     auth = (get_ssm_parameter('/development/opensky-network/username'), 
             get_ssm_parameter('/development/opensky-network/password'))
