@@ -22,7 +22,7 @@ def get_data(url, auth=None, params=None):
     return data
 
 def get_ssm_parameter(name):
-    ssm = boto3.client('ssm')
+    ssm = boto3.client('ssm', region_name=os.environ['AWS_REGION'])
     parameter = ssm.get_parameter(Name=name, WithDecryption=True)['Parameter']['Value']
     return parameter
 
