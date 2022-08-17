@@ -5,7 +5,7 @@ import datetime
 import requests
 import boto3
 
-url = ""
+url = "https://opensky-network.org/api/flights/aircraft"
 
 
 def get_unix_start_time(date):
