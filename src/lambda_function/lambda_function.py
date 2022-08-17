@@ -6,7 +6,6 @@ import requests
 import boto3
 
 url = ""
-auth = ('username', 'password')
 
 
 def get_unix_start_time(date):
@@ -21,6 +20,11 @@ def get_data(url, auth=None, params=None):
     data = resp.json()
 
     return data
+
+def get_ssm_parameter(name):
+    ssm = boto3.client('ssm')
+    parameter = ssm.get_parameter(Name=name, WithDecryption=True)['Parameter']['Value']
+    return parameter
 
 def _get_datetime_key():
     dt_now = datetime.datetime.now(tz=datetime.timezone.utc)
@@ -40,7 +44,11 @@ def lambda_handler(event, context):
     unix_end = get_unix_end_time(invoke_datetime)
     airplane_icao24 = event['airplane_icao24']
     params = {'begin': unix_start, 'end': unix_end, 'airplane_icao24': airplane_icao24}
+
+    auth = (get_ssm_parameter('/development/opensky-network/username'), 
+            get_ssm_parameter('/development/opensky-network/password'))
     data = get_data(url, auth=auth, params=params)
+
     client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
     key = f"{_get_datetime_key}{airplane_icao24}.json" 
     client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
