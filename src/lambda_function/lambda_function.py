@@ -50,5 +50,5 @@ def lambda_handler(event, context):
     data = get_data(url, auth=auth, params=params)
 
     client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
-    key = f"{_get_datetime_key}{airplane_icao24}.json" 
+    key = f"{_get_datetime_key()}{airplane_icao24}.json" 
     client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)

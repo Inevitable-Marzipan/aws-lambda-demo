@@ -51,8 +51,8 @@ def test_get_data():
 @mock_s3
 @mock_ssm
 @mock.patch.dict(os.environ, {"bucket": "test_bucket", "AWS_REGION": "eu-west-2"})
-@patch('lambda_function.lambda_function._get_datetime_key', '2015/10/08/16/53/')
-def test_lambda_handler():
+@patch('lambda_function.lambda_function._get_datetime_key', return_value='2015/10/08/16/53/')
+def test_lambda_handler(_):
     # AWS setup
     bucket_name = os.environ['bucket']
     region = os.environ['AWS_REGION']
