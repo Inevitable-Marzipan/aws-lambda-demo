@@ -42,6 +42,11 @@ resource "aws_iam_policy" "lambda_logging" {
     "Action": ["ssm:GetParameter*"],
     "Resource": ["arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/development/opensky-network/*"],
     "Effect": "Allow"
+  },
+  {
+    "Action": "s3:PutObject",
+    "Resource": ["arn:aws:s3:::${resource.aws_s3_bucket.data_bucket}/*"],
+    "Effect": "Allow"
   }
  ]
 }
