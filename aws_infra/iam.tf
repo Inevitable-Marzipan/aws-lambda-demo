@@ -45,7 +45,7 @@ resource "aws_iam_policy" "lambda_logging" {
   },
   {
     "Action": "s3:PutObject",
-    "Resource": ["arn:aws:s3:::${resource.aws_s3_bucket.data_bucket}/*"],
+    "Resource": ["arn:aws:s3:::${resource.aws_s3_bucket.data_bucket.id}/*"],
     "Effect": "Allow"
   }
  ]

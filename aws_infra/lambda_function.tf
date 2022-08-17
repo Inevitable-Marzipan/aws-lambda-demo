@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda_func" {
 
   environment {
     variables = {
-      bucket = "${resource.aws_s3_bucket.data_bucket}"
+      bucket = "${resource.aws_s3_bucket.data_bucket.id}"
     }
 
   }
