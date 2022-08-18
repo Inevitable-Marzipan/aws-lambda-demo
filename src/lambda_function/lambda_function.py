@@ -47,7 +47,8 @@ def lambda_handler(event, context):
     auth = (get_ssm_parameter('/development/opensky-network/username'), 
             get_ssm_parameter('/development/opensky-network/password'))
     data = get_data(url, auth=auth, params=params)
-
-    client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
-    key = f"{_get_datetime_key(query_datetime)}{airplane_icao24}.json" 
-    client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
+    
+    if data:
+        client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
+        key = f"{_get_datetime_key(query_datetime)}{airplane_icao24}.json" 
+        client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
