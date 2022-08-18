@@ -76,12 +76,12 @@ def test_lambda_handler():
     json_data = {"data_key": "data_value"}
     status_code = 200
 
-    with patch('lambda_function.lambda_function.get_data') as mock_get_data:
-        mock_get_data.return_value = json_data
+    with patch('lambda_function.lambda_function.requests') as mock_requests:
+        mock_requests.get.return_value = MockResponse(json_data, status_code)
 
         lambda_handler(event, context)
-        mock_get_data.assert_called_once()
-        mock_get_data.assert_called_with(url, auth=auth, params=params)
+        mock_requests.get.assert_called_once()
+        mock_requests.get.assert_called_with(url, auth=auth, params=params)
 
     body = conn_s3.Object(bucket_name, f'2015/10/08/{event["airplane_icao24"]}.json').get()[
     'Body'].read().decode("utf-8")
