@@ -26,22 +26,21 @@ def get_ssm_parameter(name):
     parameter = ssm.get_parameter(Name=name, WithDecryption=True)['Parameter']['Value']
     return parameter
 
-def _get_datetime_key():
-    dt_now = datetime.datetime.now(tz=datetime.timezone.utc)
+def _get_datetime_key(dt):
     key = (
-        dt_now.strftime("%Y-%m-%d")
+        dt.strftime("%Y")
         + "/"
-        + dt_now.strftime("%H")
+        + dt.strftime("%m")
         + "/"
-        + dt_now.strftime("%M")
+        + dt.strftime("%d")
         + "/"
     )
     return key
 
 def lambda_handler(event, context):
-    invoke_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
-    unix_start = get_unix_start_time(invoke_datetime)
-    unix_end = get_unix_end_time(invoke_datetime)
+    query_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
+    unix_start = get_unix_start_time(query_datetime)
+    unix_end = get_unix_end_time(query_datetime)
     airplane_icao24 = event['airplane_icao24']
     params = {'begin': unix_start, 'end': unix_end, 'icao24': airplane_icao24}
 
@@ -50,5 +49,5 @@ def lambda_handler(event, context):
     data = get_data(url, auth=auth, params=params)
 
     client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
-    key = f"{_get_datetime_key()}{airplane_icao24}.json" 
+    key = f"{_get_datetime_key(query_datetime)}{airplane_icao24}.json" 
     client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
