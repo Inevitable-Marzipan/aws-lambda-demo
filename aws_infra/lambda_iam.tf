@@ -21,10 +21,10 @@ resource "aws_iam_role" "lambda_role" {
 EOF
 }
 
-resource "aws_iam_policy" "lambda_logging" {
-  name        = "iam_policy_lambda_logging_function"
+resource "aws_iam_policy" "lambda_policy" {
+  name        = "iam_policy_lambda_function"
   path        = "/"
-  description = "AWS IAM Policy for logging from lambda"
+  description = "AWS IAM Policy for lambda function"
   policy      = <<EOF
 {
  "Version": "2012-10-17",
@@ -53,7 +53,7 @@ resource "aws_iam_policy" "lambda_logging" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "policy_attach" {
+resource "aws_iam_role_policy_attachment" "policy_attach_lambda" {
   role       = aws_iam_role.lambda_role.name
-  policy_arn = aws_iam_policy.lambda_logging.arn
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
