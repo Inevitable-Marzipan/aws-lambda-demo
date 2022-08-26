@@ -11,5 +11,5 @@ resource "aws_s3_bucket_object" "config_object" {
   key    = "step_function.json"
   source = "../config/step_function.json"
 
-  etag = filemd5("../config/step_function.json")
+  etag = filemd5("${path.module}/../config/step_function.json")
 }
