@@ -31,7 +31,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
             "OutputPath": "$.Payload",
             "Parameters": {
               "Payload.$": "$",
-              "FunctionName": "${resource.aws_lambda_function.lambda_func.id}"
+              "FunctionName": "${resource.aws_lambda_function.lambda_func.arn}"
             },
             "Retry": [
               {
