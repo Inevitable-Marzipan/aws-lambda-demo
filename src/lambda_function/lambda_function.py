@@ -2,10 +2,17 @@ import os
 import json
 import time
 import datetime
+import logging
+
 import requests
 import boto3
 
 url = "https://opensky-network.org/api/flights/aircraft"
+
+# Logging https://dev.to/aws-builders/why-you-should-never-ever-print-in-a-lambda-function-3i37
+logger = logging.getLogger()
+logging.basicConfig(level=logging.INFO)  # To see output in local console
+logger.setLevel(logging.INFO)  # To see output in Lambda
 
 
 def get_unix_start_time(date):
