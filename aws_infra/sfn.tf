@@ -23,10 +23,28 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "Type": "Map",
       "End": true,
       "Iterator": {
-        "StartAt": "Pass",
+        "StartAt": "Lambda Invoke",
         "States": {
-          "Pass": {
-            "Type": "Pass",
+          "Lambda Invoke": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "OutputPath": "$.Payload",
+            "Parameters": {
+              "Payload.$": "$",
+              "FunctionName": "${resource.aws_lambda_function.lambda_func.id}"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
             "End": true
           }
         }
