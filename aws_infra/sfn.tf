@@ -16,8 +16,27 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "ResultSelector": {
         "airplane_icao24s.$": "States.StringToJson($.Body)"
       },
+      "ResultPath": "$.config",
+      "Next": "Map"
+    },
+    "Map": {
+      "Type": "Map",
       "End": true,
-      "ResultPath": "$.config"
+      "Iterator": {
+        "StartAt": "Pass",
+        "States": {
+          "Pass": {
+            "Type": "Pass",
+            "End": true
+          }
+        }
+      },
+      "ItemsPath": "$.config.airplane_icao24s",
+      "MaxConcurrency": 10,
+      "Parameters": {
+        "time.$": "$.time",
+        "airplane_icao24.$": "$$.Map.Item.Value"
+      }
     }
   },
   "Comment": "S3 -> JSON",
