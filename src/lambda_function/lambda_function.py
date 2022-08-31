@@ -51,11 +51,16 @@ def lambda_handler(event, context):
     airplane_icao24 = event['airplane_icao24']
     params = {'begin': unix_start, 'end': unix_end, 'icao24': airplane_icao24}
 
+    logger.info(f"Query Parameters: {params}")
+
     auth = (get_ssm_parameter('/development/opensky-network/username'), 
             get_ssm_parameter('/development/opensky-network/password'))
     data = get_data(url, auth=auth, params=params)
     
     if data:
+        logger.info("Saving data to S3")
         client = boto3.client('s3', region_name=os.environ['AWS_REGION'])
         key = f"{_get_datetime_key(query_datetime)}{airplane_icao24}.json" 
         client.put_object(Body=json.dumps(data), Bucket=os.environ['bucket'], Key=key)
+    else:
+        logger.info("No data to save to S3")
