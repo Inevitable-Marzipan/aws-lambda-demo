@@ -40,5 +40,5 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "policy_attach_cw_events" {
   role       = aws_iam_role.cw_events_role.name
-  policy_arn = aws_iam_policy.cw_events_policy.arn
+  policy_arn = aws_iam_policy.cw_event_policy.arn
 }
