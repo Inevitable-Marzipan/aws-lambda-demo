@@ -30,7 +30,7 @@ resource "aws_iam_policy" "cw_event_policy" {
                 "states:StartExecution"
             ],
             "Resource": [
-                "arn:aws:states:::${resource.aws_sfn_state_machine.sfn_state_machine.id}"
+                "${resource.aws_sfn_state_machine.sfn_state_machine.id}"
             ]
         }
     ]
