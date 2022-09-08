@@ -25,6 +25,7 @@ def get_unix_end_time(date):
 def get_data(url, auth=None, params=None):
     resp = requests.get(url, auth=auth, params=params)
     logger.info(f'response: {resp}')
+    logger.info(f'response text: {resp.text}')
     data = resp.json()
 
     return data
