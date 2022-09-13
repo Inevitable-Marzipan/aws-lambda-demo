@@ -67,8 +67,10 @@ def test_lambda_handler():
     context = None
 
     # Expected setup
-    unix_start = get_unix_start_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ').replace(minute=0, second=0))
-    unix_end = get_unix_end_time(datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ').replace(minute=0, second=0))
+    unix_start = get_unix_start_time(
+        datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ').replace(hour=0, minute=0, second=0))
+    unix_end = get_unix_end_time(
+        datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ').replace(hour=0, minute=0, second=0))
     auth = (username, password)
     params = {'begin': unix_start, 'end': unix_end, 'icao24': event['airplane_icao24']}
     json_data = {"data_key": "data_value"}

@@ -52,7 +52,7 @@ def lambda_handler(event, context):
 
     invoke_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
     logger.info(f"invoke datetime: {invoke_datetime}")
-    query_datetime = invoke_datetime.replace(minute=0, second=0)
+    query_datetime = invoke_datetime.replace(hour=0, minute=0, second=0)
     logger.info(f"Query datetime: {query_datetime}")
     unix_start = get_unix_start_time(query_datetime)
     unix_end = get_unix_end_time(query_datetime)
