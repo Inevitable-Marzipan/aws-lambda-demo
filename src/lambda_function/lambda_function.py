@@ -25,7 +25,6 @@ def get_unix_end_time(date):
 def get_data(url, auth=None, params=None):
     resp = requests.get(url, auth=auth, params=params)
     logger.info(f'response: {resp}')
-    logger.info(f'response text: {resp.text}')
     data = resp.json()
 
     return data
@@ -51,7 +50,8 @@ def lambda_handler(event, context):
     logger.info(f"event: {event}")
     logger.info(f"context: {context}")
 
-    query_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
+    invoke_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
+    query_datetime = invoke_datetime.replace(minute=0, second=0)
     unix_start = get_unix_start_time(query_datetime)
     unix_end = get_unix_end_time(query_datetime)
     airplane_icao24 = event['airplane_icao24']
