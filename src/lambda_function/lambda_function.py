@@ -51,7 +51,9 @@ def lambda_handler(event, context):
     logger.info(f"context: {context}")
 
     invoke_datetime = datetime.datetime.strptime(event['time'], '%Y-%m-%dT%H:%M:%SZ')
+    logger.info(f"invoke datetime: {invoke_datetime}")
     query_datetime = invoke_datetime.replace(minute=0, second=0)
+    logger.info(f"Query datetime: {query_datetime}")
     unix_start = get_unix_start_time(query_datetime)
     unix_end = get_unix_end_time(query_datetime)
     airplane_icao24 = event['airplane_icao24']
