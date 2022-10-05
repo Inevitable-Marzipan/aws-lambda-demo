@@ -20,7 +20,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:DateOffsetter:$LATEST"
+        "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:DateOffsetter"
       },
       "Retry": [
         {
