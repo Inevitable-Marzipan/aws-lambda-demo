@@ -61,7 +61,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
             "OutputPath": "$.Payload",
             "Parameters": {
               "Payload.$": "$",
-              "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:OpenSkyNetworkLambdaFunction"
+              "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:OpenSkyNetworkScraper"
             },
             "Retry": [
               {
