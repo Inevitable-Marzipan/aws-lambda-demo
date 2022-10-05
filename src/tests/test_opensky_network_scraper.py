@@ -38,7 +38,7 @@ def test_get_data():
     params = {"key": "value"}
     expected_data = {'data_key': 'data_value'}
     status_code = 200
-    with patch('lambda_function.lambda_function.requests') as mock_requests:
+    with patch('lambda_functions.opensky_network_scraper.requests') as mock_requests:
         mock_requests.get.return_value = MockResponse(expected_data, status_code)
         actual = get_data(url, auth, params)
     
@@ -76,7 +76,7 @@ def test_lambda_handler():
     json_data = {"data_key": "data_value"}
     status_code = 200
 
-    with patch('lambda_function.lambda_function.requests') as mock_requests:
+    with patch('lambda_functions.opensky_network_scraper.requests') as mock_requests:
         mock_requests.get.return_value = MockResponse(json_data, status_code)
 
         lambda_handler(event, context)
@@ -112,7 +112,7 @@ def test_lambda_handler_no_data():
     json_data = []
     status_code = 200
 
-    with patch('lambda_function.lambda_function.requests') as mock_requests:
+    with patch('lambda_functions.opensky_network_scraper.requests') as mock_requests:
         mock_requests.get.return_value = MockResponse(json_data, status_code)
 
         lambda_handler(event, context)
