@@ -8,13 +8,35 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
   "States": {
     "InjectDateOffset": {
       "Type": "Pass",
-      "Next": "GetObject",
+      "Next": "DateOffsetterLambda",
       "Result": {
         "days": -1
       },
       "ResultPath": "$.offset"
     },
-    "GetObject": {
+    "DateOffsetterLambda": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:DateOffsetter:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "GetConfig"
+    },
+    "GetConfig": {
       "Type": "Task",
       "Parameters": {
         "Bucket": "openskynetwork-config-bucket",
@@ -31,9 +53,9 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "Type": "Map",
       "End": true,
       "Iterator": {
-        "StartAt": "Lambda Invoke",
+        "StartAt": "OpenskyNetworkScraperLambda",
         "States": {
-          "Lambda Invoke": {
+          "OpenskyNetworkScraperLambda": {
             "Type": "Task",
             "Resource": "arn:aws:states:::lambda:invoke",
             "OutputPath": "$.Payload",
