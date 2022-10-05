@@ -42,7 +42,8 @@ resource "aws_iam_policy" "step_function_policy" {
   {
     "Action": "lambda:InvokeFunction",
     "Effect": "Allow",
-    "Resource": "${aws_lambda_function.lambda_func.arn}"
+    "Resource": ["${aws_lambda_function.lambda_func.arn}",
+                 "${aws_lambda_function.date_offsetter_lambda_func.arn}"]
 }
  ]
 }

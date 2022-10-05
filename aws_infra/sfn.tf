@@ -4,8 +4,16 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
 
   definition = <<EOF
 {
-  "StartAt": "GetObject",
+  "StartAt": "InjectDateOffset",
   "States": {
+    "InjectDateOffset": {
+      "Type": "Pass",
+      "Next": "GetObject",
+      "Result": {
+        "days": -1
+      },
+      "ResultPath": "$.offset"
+    },
     "GetObject": {
       "Type": "Task",
       "Parameters": {
@@ -31,7 +39,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
             "OutputPath": "$.Payload",
             "Parameters": {
               "Payload.$": "$",
-              "FunctionName": "${resource.aws_lambda_function.lambda_func.arn}"
+              "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:OpenSkyNetworkLambdaFunction"
             },
             "Retry": [
               {
