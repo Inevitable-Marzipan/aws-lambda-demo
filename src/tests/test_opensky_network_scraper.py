@@ -1,4 +1,4 @@
-from lambda_function.lambda_function import (
+from lambda_functions.opensky_network_scraper import (
     url,
      get_unix_start_time,
      get_unix_end_time,
