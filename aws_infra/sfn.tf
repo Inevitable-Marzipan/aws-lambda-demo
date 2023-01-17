@@ -20,7 +20,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:DateOffsetter"
+        "FunctionName": "${resource.aws_lambda_function.date_offsetter_lambda_func.arn}"
       },
       "Retry": [
         {
@@ -61,7 +61,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
             "OutputPath": "$.Payload",
             "Parameters": {
               "Payload.$": "$",
-              "FunctionName": "arn:aws:lambda:eu-west-2:930612219184:function:OpenSkyNetworkScraper"
+              "FunctionName": "${resource.aws_lambda_function.lambda_func.arn}"
             },
             "Retry": [
               {
