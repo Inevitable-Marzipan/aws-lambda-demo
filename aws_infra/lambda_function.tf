@@ -39,3 +39,20 @@ resource "aws_lambda_function" "date_offsetter_lambda_func" {
   depends_on       = [aws_iam_role_policy_attachment.policy_attach_lambda]
 
 }
+
+data "archive_file" "dummy_lambda_file" {
+  type        = "zip"
+  source_dir  = "${local.lambda_src_path}/lambda_functions/dummy_lambda/"
+  output_path = "${local.lambda_src_path}/dummy_lambda.zip"
+}
+
+resource "aws_lambda_function" "dummy_lambda_func" {
+  filename         = data.archive_file.dummy_lambda_file.output_path
+  function_name    = "DummyLambda"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "lambda_handler.lambda_handler"
+  runtime          = "python3.8"
+  source_code_hash = data.archive_file.dummy_lambda_file.output_base64sha256
+  depends_on       = [aws_iam_role_policy_attachment.policy_attach_lambda]
+
+}
